@@ -1,0 +1,38 @@
+{
+  "name": "ngOAuth2Utils",
+  "version": "1.0.0",
+  "description": "Set of Angular Services to interact with an Oauth2 backend using the password grant type",
+  "main": "ngOAuth2Utils.js",
+  "devDependencies": {
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-uglify": "^0.4.0",
+    "grunt": "^0.4.5",
+    "grunt-karma": "^0.9.0",
+    "karma": "^0.12.24",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "load-grunt-tasks": "^0.4.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bdogger/ngOAuth2Utils.git"
+  },
+  "keywords": [
+    "angular",
+    "oauth2",
+    "password",
+    "grant_type"
+  ],
+  "author": "Blair Motchan",
+  "license": "APACHE",
+  "bugs": {
+    "url": "https://github.com/bdogger/ngOAuth2Utils/issues"
+  },
+  "homepage": "https://github.com/bdogger/ngOAuth2Utils"
+}

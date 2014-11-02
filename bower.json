@@ -1,0 +1,32 @@
+{
+  "name": "ngoauth2utils",
+  "main": "ngOAuth2Utils.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/bdogger/ngOAuth2Utils",
+  "authors": [
+    "Blair Motchan <blair.motchan@gmail.com>"
+  ],
+  "description": "Set of Angular Services to interact with an Oauth2 backend using the password grant type",
+  "keywords": [
+    "angular",
+    "oauth2",
+    "password"
+  ],
+  "dependencies": {
+    "angular": "~1.2.0",
+    "ngstorage": "~0.3.0"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.0",
+    "angular-scenario": "~1.2.0"
+  },
+  "license": "Apache 2.0",
+  "ignore": [
+    ".idea",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
