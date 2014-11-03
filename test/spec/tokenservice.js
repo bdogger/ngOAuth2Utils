@@ -1,9 +1,12 @@
 'use strict';
 
+
+angular.module('testModuleTokenService', ['ngOAuth2Utils']);
+
 describe('Service: $tokenService', function () {
 
   // load the service's module
-  beforeEach(module('ngOAuth2Utils'));
+  beforeEach(module('testModuleTokenService'));
 
   // instantiate service
   var $tokenService, $localStorage;

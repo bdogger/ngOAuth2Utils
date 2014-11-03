@@ -1,9 +1,17 @@
 'use strict';
 
+angular.module('testModuleAuthenticationService', ['ngOAuth2Utils'])
+    .constant('oauth2Config', {
+      base64BasicKey: '123Key',
+      getAccessTokenUrl: 'http://localhost/oauth/token',
+      revokeTokenUrl: 'http://localhost/token'
+    });
+
+
 describe('Service: $authenticationService', function () {
 
   // load the service's module
-  beforeEach(module('ngOAuth2Utils'));
+  beforeEach(module('testModuleAuthenticationService'));
 
   // instantiate service
   var $authenticationService, $httpBackend, $tokenService;
@@ -12,10 +20,6 @@ describe('Service: $authenticationService', function () {
     $httpBackend = _$httpBackend_;
     $authenticationService = _$authenticationService_;
     $tokenService = _$tokenService_;
-
-    oauth2Config.base64BasicKey = '123Key';
-    oauth2Config.getAccessTokenUrl = 'http://localhost/oauth/token';
-    oauth2Config.revokeTokenUrl = 'http://localhost/token';
   }));
 
   it('expects login() to call the authentication url with valid credentials', function () {

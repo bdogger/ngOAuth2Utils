@@ -1,9 +1,14 @@
 'use strict';
 
+angular.module('testModuleHttpInterceptorService', ['ngOAuth2Utils'])
+    .config(['$httpProvider', function ($httpProvider) {
+      $httpProvider.interceptors.push('$httpInterceptorService');
+    }]);
+
 describe('Service: $httpInterceptorService', function () {
 
   // load the service's module
-  beforeEach(module('ngOAuth2Utils'));
+  beforeEach(module('testModuleHttpInterceptorService'));
 
   // instantiate service
   var $httpInterceptorService, $tokenService, $httpBackend, $http, $location;

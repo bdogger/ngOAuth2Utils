@@ -4,12 +4,6 @@
 
   angular.module('ngOAuth2Utils', ['ngStorage'])
 
-      .value('oauth2Config', {})
-
-      .config(['$httpProvider', function ($httpProvider) {
-        $httpProvider.interceptors.push('$httpInterceptorService');
-      }])
-
       .factory('$tokenService', function $tokenService($localStorage) {
         return {
           getToken: function () {
