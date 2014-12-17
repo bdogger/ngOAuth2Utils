@@ -115,6 +115,7 @@
                 },
                 'responseError': function (rejection) {
                     if (rejection.status == 401 || (rejection.status == 400 && rejection.config.params.grant_type === 'refresh_token')) {// jshint ignore:line
+                        $tokenService.reset();
                         $location.path('login');
                     }
                     return $q.reject(rejection);

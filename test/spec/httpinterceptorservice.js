@@ -85,6 +85,7 @@ describe('Service: $httpInterceptorService', function () {
     $httpBackend.flush();
 
     expect($location.path()).toBe('/login');
+    expect($tokenService.isValidToken()).toBeFalsy();
   });
 
 });
