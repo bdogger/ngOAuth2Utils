@@ -28,9 +28,7 @@ module.exports = function (config) {
       'bower_components/angular-touch/angular-touch.js',
       'bower_components/ngstorage/ngStorage.js',
       'ngOAuth2Utils.js',
-      'app/scripts/**/*.js',
-      'test/mock/**/*.js',
-      'test/spec/**/*.js'
+      'test/spec/*.js'
     ],
 
     // list of files / patterns to exclude

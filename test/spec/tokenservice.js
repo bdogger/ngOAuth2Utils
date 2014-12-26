@@ -1,7 +1,12 @@
 'use strict';
 
 
-angular.module('testModuleTokenService', ['ngOAuth2Utils']);
+angular.module('testModuleTokenService', ['ngOAuth2Utils'])
+    .constant('oauth2Config', {
+        base64BasicKey: '123Key',
+        getAccessTokenUrl: 'http://localhost/oauth/token',
+        revokeTokenUrl: 'http://localhost/token'
+    });
 
 describe('Service: $tokenService', function () {
 

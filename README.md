@@ -19,13 +19,7 @@ Add an oauth2config constant with the following values:
             getAccessTokenUrl: 'http://localhost/oauth/token',  //The GET url to get a new token
             revokeTokenUrl: 'http://localhost/token', //The DELETE url to revoke a token
         });
-        
-##To use $httpInterceptorService##
-    angular.module('yourAngularModule', ['ngOAuth2Utils'])
-        .config(['$httpProvider', function ($httpProvider) {
-        $httpProvider.interceptors.push('$httpInterceptorService');
-    }]);
-    
+
 This will check for 400 and 401 unauthenticated response errors and will change the location path to 'login' if unauthenticated
     
 This will check all outgoing requests, except to /oauth/token, and will add an access token if one is available

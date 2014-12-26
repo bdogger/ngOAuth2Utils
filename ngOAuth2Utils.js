@@ -114,13 +114,36 @@
                     return config;
                 },
                 'responseError': function (rejection) {
-                    if (rejection.status == 401 || (rejection.status == 400 && rejection.config.params.grant_type === 'refresh_token')) {// jshint ignore:line
+                    if (rejection.status === 401 || (rejection.status === 400
+                        && rejection.config.params.grant_type === 'refresh_token')) {// jshint ignore:line
                         $tokenService.reset();
                         $location.path('login');
+                    }
+                    else if (rejection.status === 403) {
+                        $location.path('access-denied');
                     }
                     return $q.reject(rejection);
                 }
             };
+        })
+
+        .config(['$httpProvider', function ($httpProvider) {
+            $httpProvider.interceptors.push('$httpInterceptorService');
+        }])
+
+        .run(function ($location, $tokenService, $authenticationService, $rootScope) {
+            if ($tokenService.isValidAndExpiredToken()) {
+                $authenticationService.refresh();
+            }
+            else if (!$tokenService.isValidToken()) {
+                $location.path('login');
+            }
+            $rootScope.$on('$locationChangeStart', function (event, next) {
+                if (!$tokenService.isValidToken() && !next.match(/#\/login$/)) {
+                    //prevent location change.
+                    event.preventDefault();
+                }
+            });
         });
 
 })();
