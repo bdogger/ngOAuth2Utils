@@ -138,8 +138,8 @@
             else if (!$tokenService.isValidToken()) {
                 $location.path('login');
             }
-            $rootScope.$on('$locationChangeStart', function (event, next) {
-                if (!$tokenService.isValidToken() && !next.match(/#\/login$/)) {
+            $rootScope.$on('$routeChangeStart', function (event) {
+                if (!$tokenService.isValidToken()) {
                     //prevent location change.
                     event.preventDefault();
                 }
