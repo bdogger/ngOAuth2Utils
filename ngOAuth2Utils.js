@@ -142,6 +142,7 @@
                 if (!$tokenService.isValidToken()) {
                     //prevent location change.
                     event.preventDefault();
+                    $location.path('login');
                 }
             });
         });
