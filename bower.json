@@ -1,7 +1,7 @@
 {
   "name": "ngoauth2utils",
   "main": "ngOAuth2Utils.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/bdogger/ngOAuth2Utils",
   "authors": [
     "Blair Motchan <blair.motchan@gmail.com>"
