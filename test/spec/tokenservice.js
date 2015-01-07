@@ -1,22 +1,18 @@
 'use strict';
 
-
-angular.module('testModuleTokenService', ['ngOAuth2Utils'])
-    .constant('oauth2Config', {
-        base64BasicKey: '123Key',
-        getAccessTokenUrl: 'http://localhost/oauth/token',
-        revokeTokenUrl: 'http://localhost/token'
-    });
-
 describe('Service: $tokenService', function () {
 
     // load the service's module
-    beforeEach(module('testModuleTokenService'));
+    beforeEach(module('ngOAuth2Utils'));
 
     // instantiate service
     var $tokenService, $localStorage;
 
-    beforeEach(inject(function (_$tokenService_, _$localStorage_) {
+    beforeEach(inject(function (_$tokenService_, _$localStorage_, oauthConfig) {
+        oauthConfig.base64BasicKey = '123Key';
+        oauthConfig.getAccessTokenUrl = 'http://localhost/oauth/token';
+        oauthConfig.revokeTokenUrl = 'http://localhost/token';
+
         $tokenService = _$tokenService_;
         $localStorage = _$localStorage_;
     }));

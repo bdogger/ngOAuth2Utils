@@ -1,28 +1,51 @@
 #ngOAuth2Utils - Set of angular utilities for interacting with OAuth2 backends#
 
 ---
+##What does this module do?##
+When you add this module to your angular project (and configure it), it provides the services necessary to have an oauth authentication scheme.
+At this point login and logout controllers and views will have to be added independent of this project in order to keep the services flexible.
+Once configured, you can use the services to secure your application against unauthenticated users also use it for communicating with an Ouath2 authentication server and for adding an Authorization token to every request.
 
 ##Installation##
-
 To install this component into your project
 
 Set of Angular Services to interact with an Oauth2 backend using the password grant type
 
     bower install ngoauth2utils
 
-#General Usage#
-Add an oauth2config constant with the following values:
+Or, to save it into your bower dependencies
+
+    bower install ngoauth2utils --save
+
+##General Usage##
+Add ngOauth2Utils to your project
     
     angular.module('yourAngularModule',  ['ngOAuth2Utils'])
-        .constant('oauth2Config', {
-            base64BasicKey: '123123asdfasdf=asdfasdf',  //base64 version of clientid:secret
-            getAccessTokenUrl: 'http://localhost/oauth/token',  //The GET url to get a new token
-            revokeTokenUrl: 'http://localhost/token', //The DELETE url to revoke a token
+
+Configure the ouathConstants in a config block:
+
+    angular.module('yourAngularModule',  ['ngOAuth2Utils'])
+        .config(function(oauthConfig) {
+           oauthConfig.getAccessTokenUrl: 'http://www.mysite.com/ouath/token';
+           oauthConfig.base64BasicKey: '123123asdfasdf=asdfasdf';
+           revokeTokenUrl: 'http://www.mysite.com/token';
+           interceptorIgnorePattern: /oauth\/token/;
+           loginPath: '/login';
         });
 
-This will check for 400 and 401 unauthenticated response errors and will change the location path to 'login' if unauthenticated
-    
-This will check all outgoing requests, except to /oauth/token, and will add an access token if one is available
+##Configuration Values##
+**getAccessTokenUrl** the URL to use for retrieving a token, a GET request will be made
+
+**base64BasicKey:** the base64 version of your client:secret key
+
+**revokeTokenUrl:** the url to revoke a token, a DELETE request will be made
+
+**interceptorIgnorePattern:** if the URL matches this pattern, then the authorization header will not be added to the request
+
+**loginPath:** the angular route to display the login form
+
+
+
 
 ##To use $authenticationService##
 The $authenticationService has methods for getting an access token, refreshing a token, and logging out.
