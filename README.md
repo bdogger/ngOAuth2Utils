@@ -26,11 +26,12 @@ Configure the ouathConstants in a config block:
 
     angular.module('yourAngularModule',  ['ngOAuth2Utils'])
         .config(function(oauthConfig) {
-           oauthConfig.getAccessTokenUrl: 'http://www.mysite.com/ouath/token';
-           oauthConfig.base64BasicKey: '123123asdfasdf=asdfasdf';
-           revokeTokenUrl: 'http://www.mysite.com/token';
-           interceptorIgnorePattern: /oauth\/token/;
-           loginPath: '/login';
+           oauthConfig.getAccessTokenUrl: 'http://www.mysite.com/ouath/token',
+           oauthConfig.base64BasicKey: '123123asdfasdf=asdfasdf',
+           revokeTokenUrl: 'http://www.mysite.com/token',
+           interceptorIgnorePattern: /oauth\/token/,
+           loginPath: '/login',
+           storageType: 'session'
         });
 
 ##Configuration Values##
@@ -44,7 +45,7 @@ Configure the ouathConstants in a config block:
 
 **loginPath:** the angular route to display the login form
 
-
+**storageType** the type of storage to use, either 'local' for localStorage, or 'session' for sessionStorage.  Session being the default, and more secure option
 
 
 ##To use $authenticationService##

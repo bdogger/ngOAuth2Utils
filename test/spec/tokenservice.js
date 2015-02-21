@@ -6,62 +6,63 @@ describe('Service: $tokenService', function () {
     beforeEach(module('ngOAuth2Utils'));
 
     // instantiate service
-    var $tokenService, $localStorage;
+    var $tokenService, storageService;
 
-    beforeEach(inject(function (_$tokenService_, _$localStorage_, oauthConfig) {
+    beforeEach(inject(function (_$tokenService_, _storageService_, oauthConfig) {
         oauthConfig.base64BasicKey = '123Key';
         oauthConfig.getAccessTokenUrl = 'http://localhost/oauth/token';
         oauthConfig.revokeTokenUrl = 'http://localhost/token';
+        oauthConfig.storageType = 'session';
 
         $tokenService = _$tokenService_;
-        $localStorage = _$localStorage_;
+        storageService = _storageService_;
     }));
 
     it('expects setToken() to set the token', function () {
         var token = '123';
         $tokenService.setToken(token);
-        expect($localStorage.token).toBe(token);
+        expect(storageService.getStorage().token).toBe(token);
     });
 
     it('expects getToken() to return the token', function () {
         var token = '123';
-        $localStorage.token = token;
+        storageService.getStorage().token = token;
         expect($tokenService.getToken()).toEqual(token);
     });
 
     it('expects setExpiration() to set the expiration in milliseconds from now', function () {
         $tokenService.setExpiresIn(3600);
-        var savedValue = $localStorage.expiresIn;
+        var savedValue = storageService.getStorage().expiresIn;
         expect(savedValue.valueOf()).toBeGreaterThan(new Date().valueOf());
         expect(savedValue.valueOf()).toBeLessThan(new Date(new Date().valueOf() + (3601 * 1000)).valueOf());
     });
 
     it('expects isValidToken() to be false when token is null', function () {
-        $localStorage.token = null;
+        storageService.getStorage().token = null;
         expect($tokenService.isValidToken()).toBeFalsy();
     });
 
     it('expects isValidToken() to be false when token is expired', function () {
-        $localStorage.token = '123';
-        $localStorage.expiresIn = 0;
+        storageService.getStorage().token = '123';
+        storageService.getStorage().expiresIn = 0;
         expect($tokenService.isValidToken()).toBeFalsy();
     });
 
     it('expects isValidToken() to be true when the token is valid and not expired', function () {
-        $localStorage.token = '123';
-        $localStorage.expiresIn = new Date(new Date().valueOf() + 50000);
+        storageService.getStorage().token = '123';
+        storageService.getStorage().expiresIn = new Date(new Date().valueOf() + 50000);
         expect($tokenService.isValidToken()).toBeTruthy();
     });
 
     it('expects setRefreshToken() to set the refreshToken', function () {
         var refreshToken = 'asdfasd';
         $tokenService.setRefreshToken(refreshToken);
-        expect($localStorage.refreshToken = refreshToken);
+        expect(storageService.getStorage().refreshToken = refreshToken);
     });
 
     it('expects getRefreshToken() to return the refreshToken', function () {
         var refreshToken = 'asdfasd';
-        $localStorage.refreshToken = refreshToken;
+        storageService.getStorage().refreshToken = refreshToken;
         expect($tokenService.getRefreshToken()).toBe(refreshToken);
     });
 
@@ -74,7 +75,7 @@ describe('Service: $tokenService', function () {
 
         expect($tokenService.getToken()).toBeNull();
         expect($tokenService.getRefreshToken()).toBeNull();
-        expect($localStorage.expiresIn).toBeNull();
+        expect(storageService.getStorage().expiresIn).toBeNull();
     });
 
     it('expects isValidAndExpiredToken() to return false when there is no token', function () {
@@ -93,7 +94,7 @@ describe('Service: $tokenService', function () {
     it('expects isValidAndExpiredToken() to return false when there is no expiresIn', function () {
         $tokenService.setToken('123');
         $tokenService.setRefreshToken('123');
-        $localStorage.expiresIn = null;
+        storageService.getStorage().expiresIn = null;
 
         expect($tokenService.isValidAndExpiredToken()).toBeFalsy();
     });

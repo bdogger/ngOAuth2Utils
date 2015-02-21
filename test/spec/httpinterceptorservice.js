@@ -69,8 +69,6 @@ describe('Service: $httpInterceptorService', function () {
         expect($location.path()).toBe('/login');
     });
 
-    it('expex')
-
     it('expects the login view when it is a 400 after a refresh', function () {
         $location.path('/');
         $httpBackend.expectGET(
