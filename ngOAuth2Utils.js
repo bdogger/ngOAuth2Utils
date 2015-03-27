@@ -45,10 +45,10 @@ angular.module('ngOAuth2Utils')
         return {
             login: function (username, password) {
                 return $http({
-                    method: 'GET',
+                    method: 'POST',
                     url: oauthConfig.getAccessTokenUrl,
                     headers: {'Authorization': 'Basic ' + oauthConfig.base64BasicKey},
-                    params: {
+                    data: {
                         'grant_type': 'password',
                         'password': password,
                         'username': username

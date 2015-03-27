@@ -19,11 +19,17 @@ describe('Service: $authenticationService', function () {
     }));
 
     it('expects login() to call the authentication url with valid credentials', function () {
-        $httpBackend.expectGET(
-            'http://localhost/oauth/token?grant_type=password&password=password&username=user',
+        $httpBackend.expectPOST(
+            'http://localhost/oauth/token',
+            {
+                'grant_type': 'password',
+                'password': 'password',
+                'username': 'user'
+            },
             {
                 Authorization: 'Basic 123Key',
-                Accept: 'application/json, text/plain, */*'
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8'
             })
             .respond({
                 'access_token': '123',
