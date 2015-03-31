@@ -71,15 +71,16 @@ describe('Service: $httpInterceptorService', function () {
 
     it('expects the login view when it is a 400 after a refresh', function () {
         $location.path('/');
-        $httpBackend.expectGET(
-            'http://localhost/oauth/token?grant_type=refresh_token&refresh_token=444',
-            {'Accept': 'application/json, text/plain, */*'}
+        $httpBackend.expectPOST(
+            'http://localhost/oauth/token',
+            {'grant_type': 'refresh_token', 'refresh_token': '444'},
+            {'Accept': 'application/json, text/plain, */*','Content-Type': 'application/json;charset=utf-8'}
         ).respond(400);
 
         $http({
-            method: 'GET',
+            method: 'POST',
             url: 'http://localhost/oauth/token',
-            params: {'grant_type': 'refresh_token', 'refresh_token': '444'}
+            data: {'grant_type': 'refresh_token', 'refresh_token': '444'}
         });
 
         $httpBackend.flush();

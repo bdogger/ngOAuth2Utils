@@ -61,11 +61,13 @@ describe('Service: $authenticationService', function () {
 
     it('expects refresh() to refresh the token', function () {
         $tokenService.setRefreshToken('123');
-        $httpBackend.expectGET(
-            'http://localhost/oauth/token?grant_type=refresh_token&refresh_token=123',
+        $httpBackend.expectPOST(
+            'http://localhost/oauth/token',
+            {'grant_type': 'refresh_token', 'refresh_token': '123'},
             {
                 'Authorization': 'Basic 123Key',
-                'Accept': 'application/json, text/plain, */*'
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json;charset=utf-8'
             }
         )
             .respond({

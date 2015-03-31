@@ -1,6 +1,6 @@
 {
   "name": "ngOAuth2Utils",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Set of Angular Services to interact with an Oauth2 backend using the password grant type",
   "main": "ngOAuth2Utils.js",
   "dependencies": {},

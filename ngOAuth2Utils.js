@@ -63,10 +63,10 @@ angular.module('ngOAuth2Utils')
             },
             refresh: function () {
                 return $http({
-                    method: 'GET',
+                    method: 'POST',
                     url: oauthConfig.getAccessTokenUrl,
                     headers: {'Authorization': 'Basic ' + oauthConfig.base64BasicKey},
-                    params: {
+                    data: {
                         'refresh_token': $tokenService.getRefreshToken(),
                         'grant_type': 'refresh_token'
                     }
