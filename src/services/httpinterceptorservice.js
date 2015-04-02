@@ -10,7 +10,10 @@ angular.module('ngOAuth2Utils')
                 return config;
             },
             'responseError': function (rejection) {
-                if (rejection.status === 401 || (rejection.status === 400
+                if (rejection.status === 401 ||
+                    (rejection.status === 400 // jshint ignore:line
+                    && rejection.config.data// jshint ignore:line
+                    && rejection.config.data.grant_type// jshint ignore:line
                     && rejection.config.data.grant_type === 'refresh_token')) {// jshint ignore:line
                     $tokenService.reset();
                     $location.path(oauthConfig.loginPath);
