@@ -2,9 +2,8 @@
 
 ---
 ##What does this module do?##
-When you add this module to your angular project (and configure it), it provides the services necessary to have an oauth authentication scheme.
-At this point login and logout controllers and views will have to be added independent of this project in order to keep the services flexible.
-Once configured, you can use the services to secure your application against unauthenticated users also use it for communicating with an Ouath2 authentication server and for adding an Authorization token to every request.
+When you add this module to your angular project (and configure it), it provides full authentication to your application using the Oauth2 password grant_type.
+Once configured, you can use the require-authenticated and require unauthenticated directives to secure your UI.  Configuring a watch on $tokenService.isValidToken() provides the ability to run app-specific logic when logged out or logged in.
 
 ##Installation##
 To install this component into your project
@@ -16,6 +15,9 @@ Set of Angular Services to interact with an Oauth2 backend using the password gr
 Or, to save it into your bower dependencies
 
     bower install ngoauth2utils --save
+    
+##A note about base64BasicKey##
+Including this in your code does mean that the user will have access to it.  However, it is part of the spec, and some oauth2 backends will not function if it not included.  So long as the client is configured to only have password and refresh grant types, then the client cannot be used to access other users information.
 
 ##General Usage##
 Add ngOauth2Utils to your project
@@ -29,9 +31,12 @@ Configure the ouathConstants in a config block:
            oauthConfig.getAccessTokenUrl: 'http://www.mysite.com/ouath/token',
            oauthConfig.base64BasicKey: '123123asdfasdf=asdfasdf',
            revokeTokenUrl: 'http://www.mysite.com/token',
-           interceptorIgnorePattern: /oauth\/token/,
-           loginPath: '/login',
-           storageType: 'session'
+           interceptorIgnorePattern: /oauth\/token/,           
+           storageType: 'session',
+           loginSuccessPath: '/successful-login-path',
+           loginErrorMessage: 'error_description',
+           logoutSuccessMessage: 'logoutSuccess',
+           useRouting: true
         });
 
 ##Configuration Values##
@@ -47,6 +52,31 @@ Configure the ouathConstants in a config block:
 
 **storageType** the type of storage to use, either 'local' for localStorage, or 'session' for sessionStorage.  Session being the default, and more secure option
 
+**loginSuccessPath** the path to display if a user has successfully logged in
+
+**loginErrorMessage** the value in the response that contains the login error message
+
+**logoutSuccessMessage** the value in the response that contains the successful logout message
+
+**userRouting** true or false, true by default -if true, then a login and logout paths and forms will be created for you
+
+**loginFunction** a function to be ran when successfully logged in
+
+
+##Usage##
+If userRouting is true, then it is assumed you are using routes and ng-view, then the app will configure a login route for you and require unauthenticated users to authenticate using the provided login form.
+The require-authenticated and require-unauthenticated directives are attribute directives and can be displayed to any element to either show or hide them based upon authenticated status. 
+A loginFunction can be provided to be called after a successful login.  Or, a watch can be created to run upon successful token creation (login) or destruction (logout)
+    
+    $rootScope.$watch(function () {
+      return $tokenService.isValidToken();
+    }, function () {
+      if ($tokenService.isValidToken()) {
+        //successful login code
+      } else {
+        //logout code
+      }
+    });
 
 ##To use $authenticationService##
 The $authenticationService has methods for getting an access token, refreshing a token, and logging out.
@@ -55,7 +85,12 @@ The $authenticationService has methods for getting an access token, refreshing a
 Is really just a wrapper for $localStorage from the ngstorage component.  The $authenticationService and $httpInterceptorService rely on the $tokenService
  
 ##More Details##
-Please view the tests for examples of all services
+Please view the tests for examples of all services.
+
+##TODO##
+Add e2e tests for application - I have e2e tests created for the applications that use this module, but I need to setup a fake server to provide successful and unsuccessful statuses in order to bundle e2e tests with the module
+ 
+Provide a logout success callback
 
 
 

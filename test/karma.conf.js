@@ -16,8 +16,14 @@ module.exports = function (config) {
         // testing framework to use (jasmine/mocha/qunit/...)
         frameworks: ['jasmine'],
 
+        preprocessors: {
+            'src/oauth2Templates/**/*.html': ['ng-html2js'],
+            'src/**/*.js': ['coverage']
+        },
+
         // list of files / patterns to load in the browser
         files: [
+            'bower_components/jquery/dist/jquery.js',
             'bower_components/angular/angular.js',
             'bower_components/angular-mocks/angular-mocks.js',
             'bower_components/angular-animate/angular-animate.js',
@@ -27,9 +33,28 @@ module.exports = function (config) {
             'bower_components/angular-sanitize/angular-sanitize.js',
             'bower_components/angular-touch/angular-touch.js',
             'bower_components/ngstorage/ngStorage.js',
+            'bower_components/angular-route/angular-route.js',
+            'src/oauth2Templates/**/*.html',
             'src/**/*.js',
-            'test/spec/*.js'
+            'test/spec/**/*.js'
         ],
+
+        ngHtml2JsPreprocessor: {
+            // strip this from the file path
+            stripPrefix: 'src/'
+            //stripSufix: '.ext',
+            //// prepend this to the
+            //prependPrefix: 'served/',
+            //
+            ////// or define a custom transform function
+            ////cacheIdFromPath: function(filepath) {
+            ////  return cacheId;
+            ////},
+            //
+            //// setting this option will create only a single module that contains templates
+            //// from all the files, so you can load them all with module('foo')
+            //moduleName: 'foo'
+        },
 
         // list of files / patterns to exclude
         exclude: [],
@@ -51,8 +76,10 @@ module.exports = function (config) {
 
         // Which plugins to enable
         plugins: [
+            'karma-ng-html2js-preprocessor',
             'karma-phantomjs-launcher',
-            'karma-jasmine'
+            'karma-jasmine',
+            'karma-coverage'
         ],
 
         // Continuous Integration mode

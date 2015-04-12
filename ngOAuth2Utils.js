@@ -3,14 +3,42 @@
  (function(){
 
 // Source: src/app.js
-angular.module('ngOAuth2Utils', ['ngStorage'])
+angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
     .constant('oauthConfig', {
         getAccessTokenUrl: '',
         base64BasicKey: '',
         revokeTokenUrl: '',
-        loginPath: '',
+        loginPath: '/login',
+        loginSuccessPath: '',
         interceptorIgnorePattern: / /,
-        storageType: 'session'
+        loginErrorMessage: '',
+        loginFunction: null,
+        logoutSuccessMessage: '',
+        storageType: 'session',
+        useRouting: true
+    })
+
+    .config(function ($routeProvider, oauthConfig) {
+        if (oauthConfig.useRouting) {
+            $routeProvider
+                .when('/login', {
+                    controller: 'LoginCtrl',
+                    template: '<login-form></login-form>'
+                })
+                .when('/logout', {
+                    controller: 'LogoutCtrl',
+                    template: '<logout-message></logout-message>'
+                })
+                .when('/access-denied', {
+                    template: '<access-denied-message></access-denied-message>'
+                })
+                .when('/malformed-url', {
+                    template: '<malformed-url-message></malformed-url-message>'
+                })
+                .when('/error', {
+                    template: '<error-message></error-message>'
+                });
+        }
     })
 
     .config(['$httpProvider', function ($httpProvider) {
@@ -26,12 +54,109 @@ angular.module('ngOAuth2Utils', ['ngStorage'])
         }
         $rootScope.$on('$routeChangeStart', function (event) {
             if (!$tokenService.isValidToken()) {
-                //prevent location change.
                 event.preventDefault();
                 $location.path(oauthConfig.loginPath);
             }
         });
     });
+// Source: src/controllers/login.js
+angular.module('ngOAuth2Utils')
+    .controller('LoginCtrl', function ($scope, $location, $authenticationService, oauthConfig) {
+        $scope.login = function (loginDetails) {
+            $scope.loginError = null;
+            $authenticationService.login(loginDetails.username, loginDetails.password).then(
+                function () {
+                    $location.path(oauthConfig.loginSuccessPath);
+                    if (oauthConfig.loginFunction) {
+                        oauthConfig.loginFunction();
+                    }
+                },
+                function (response) {
+                    $scope.loginError = response.data[oauthConfig.loginErrorMessage];// jshint ignore:line
+                });
+        };
+    });
+// Source: src/controllers/logout.js
+angular.module('ngOAuth2Utils')
+    .controller('LogoutCtrl', function ($scope, $authenticationService, $tokenService, storageService, oauthConfig) {
+        $authenticationService.logout()
+            .then(function (response) {
+                $scope.logoutSuccess = response.data[oauthConfig.logoutSuccessMessage];
+            });
+        storageService.getStorage().$reset({});
+        $tokenService.reset();
+    });
+// Source: src/directives/loginform.js
+angular.module('ngOAuth2Utils')
+    .directive('loginForm', function () {
+        return {
+            restrict: 'E',
+            controller: 'LoginCtrl',
+            templateUrl: 'oauth2Templates/loginform.html'
+        };
+    });
+// Source: src/directives/requireauthenticated.js
+angular.module('ngOAuth2Utils')
+    .directive('requireAuthenticated', function ($tokenService) {
+        return {
+            restrict: 'A',
+            link: function (scope, element) {
+                scope.$watch(function () {
+                    return $tokenService.isValidToken();
+                }, function () {
+                    if ($tokenService.isValidToken()) {
+                        element.removeClass('hidden');
+                    } else {
+                        element.addClass('hidden');
+                    }
+                });
+            }
+        };
+    });
+// Source: src/directives/requirerequireauthenticated.js.js
+angular.module('ngOAuth2Utils')
+    .directive('requireUnauthenticated', function ($tokenService) {
+        return {
+            restrict: 'A',
+            link: function (scope, element) {
+                scope.$watch(function () {
+                    return $tokenService.isValidToken();
+                }, function () {
+                    if (!$tokenService.isValidToken()) {
+                        element.removeClass('hidden');
+                    } else {
+                        element.addClass('hidden');
+                    }
+                });
+            }
+        };
+    });
+// Source: src/oauth2Templates/templates.js
+angular.module('ngOAuth2Utils').run(['$templateCache', function($templateCache) {
+$templateCache.put('oauth2Templates/loginform.html',
+    "<div>\n" +
+    "    <div class=\"alert alert-danger login-error\" id=\"login-error\" ng-if=\"loginError\">{{loginError}}</div>\n" +
+    "    <form name=\"loginForm\" novalidate ng-submit=\"login(loginDetails)\">\n" +
+    "        <div class=\"form-group\">\n" +
+    "            <input name=\"username\" id=\"username\" class=\"form-control\" type=\"text\" placeholder=\"username\"\n" +
+    "                   ng-model=\"loginDetails.username\"\n" +
+    "                   required/>\n" +
+    "        </div>\n" +
+    "        <div class=\"form-group\">\n" +
+    "            <input name=\"password\" id=\"password\" class=\"form-control\" type=\"password\" placeholder=\"password\"\n" +
+    "                   ng-model=\"loginDetails.password\" required/>\n" +
+    "        </div>\n" +
+    "        <div class=\"form-group\">\n" +
+    "            <button type=\"submit\" class=\"btn btn-primary btn-block login-button\" ng-disabled=\"loginForm.$invalid\">\n" +
+    "                Login <span class=\"glyphicon glyphicon-user\"></span>\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "    </form>\n" +
+    "</div>"
+  );
+
+}]);
+
 // Source: src/services/authenticationservice.js
 angular.module('ngOAuth2Utils')
     .factory('$authenticationService', function $authenticationService($http, $tokenService, oauthConfig) {
