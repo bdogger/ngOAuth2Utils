@@ -28,15 +28,6 @@ angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
                 .when('/logout', {
                     controller: 'LogoutCtrl',
                     template: '<logout-message></logout-message>'
-                })
-                .when('/access-denied', {
-                    template: '<access-denied-message></access-denied-message>'
-                })
-                .when('/malformed-url', {
-                    template: '<malformed-url-message></malformed-url-message>'
-                })
-                .when('/error', {
-                    template: '<error-message></error-message>'
                 });
         }
     })

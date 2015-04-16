@@ -23,16 +23,4 @@ describe('Config: $route', function () {
         expect(logoutRoute.template).toBe('<logout-message></logout-message>');
     });
 
-    it('expects /access-denied to route to access-denied page', function () {
-        expect($route.routes['/access-denied'].template).toBe('<access-denied-message></access-denied-message>');
-    });
-
-    it('expects /malformed-url to route to malformed-url page', function () {
-        expect($route.routes['/malformed-url'].template).toBe('<malformed-url-message></malformed-url-message>');
-    });
-
-    it('expects /error to route to error page', function () {
-        expect($route.routes['/error'].template).toBe('<error-message></error-message>');
-    });
-
 });
