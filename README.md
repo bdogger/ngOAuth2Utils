@@ -28,15 +28,15 @@ Configure the ouathConstants in a config block:
 
     angular.module('yourAngularModule',  ['ngOAuth2Utils'])
         .config(function(oauthConfig) {
-           oauthConfig.getAccessTokenUrl: 'http://www.mysite.com/ouath/token',
-           oauthConfig.base64BasicKey: '123123asdfasdf=asdfasdf',
-           revokeTokenUrl: 'http://www.mysite.com/token',
-           interceptorIgnorePattern: /oauth\/token/,           
-           storageType: 'session',
-           loginSuccessPath: '/successful-login-path',
-           loginErrorMessage: 'error_description',
-           logoutSuccessMessage: 'logoutSuccess',
-           useRouting: true
+           oauthConfig.getAccessTokenUrl = 'http://www.mysite.com/ouath/token';
+           oauthConfig.base64BasicKey = '123123asdfasdf=asdfasdf';
+           revokeTokenUrl = 'http://www.mysite.com/token';
+           interceptorIgnorePattern = /oauth\/token/;           
+           storageType = 'session';
+           loginSuccessPath = '/successful-login-path';
+           loginErrorMessage = 'error_description';
+           logoutSuccessMessage = 'logoutSuccess';
+           useRouting = true;
         });
 
 ##Configuration Values##

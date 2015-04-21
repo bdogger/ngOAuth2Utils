@@ -40,10 +40,11 @@ angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
         else if (!$tokenService.isValidToken()) {
             $location.path(oauthConfig.loginPath);
         }
-        $rootScope.$on('$routeChangeStart', function (event) {
+        $rootScope.$on('$routeChangeStart', function () {
             if (!$tokenService.isValidToken()) {
-                event.preventDefault();
-                $location.path(oauthConfig.loginPath);
+                $rootScope.$evalAsync(function () {
+                    $location.path('/login');
+                });
             }
         });
     });

@@ -43,10 +43,11 @@ angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
         else if (!$tokenService.isValidToken()) {
             $location.path(oauthConfig.loginPath);
         }
-        $rootScope.$on('$routeChangeStart', function (event) {
+        $rootScope.$on('$routeChangeStart', function () {
             if (!$tokenService.isValidToken()) {
-                event.preventDefault();
-                $location.path(oauthConfig.loginPath);
+                $rootScope.$evalAsync(function () {
+                    $location.path('/login');
+                });
             }
         });
     });
@@ -82,8 +83,15 @@ angular.module('ngOAuth2Utils')
     .directive('loginForm', function () {
         return {
             restrict: 'E',
-            controller: 'LoginCtrl',
             templateUrl: 'oauth2Templates/loginform.html'
+        };
+    });
+// Source: src/directives/logoutmessage.js
+angular.module('ngOAuth2Utils')
+    .directive('logoutMessage', function () {
+        return {
+            restrict: 'E',
+            template: '<div class="alert alert-success" id="logout-message">You have successfully logged out.</div>'
         };
     });
 // Source: src/directives/requireauthenticated.js
@@ -104,7 +112,7 @@ angular.module('ngOAuth2Utils')
             }
         };
     });
-// Source: src/directives/requirerequireauthenticated.js.js
+// Source: src/directives/requirerequireauthenticated.js
 angular.module('ngOAuth2Utils')
     .directive('requireUnauthenticated', function ($tokenService) {
         return {
