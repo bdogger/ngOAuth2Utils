@@ -17,13 +17,14 @@ describe('Controller: LoginCtrl', function () {
     beforeEach(inject(function ($controller, $rootScope, _$q_, _$location_, _oauthConfig_) {
         count = 0;
         oauthConfig = _oauthConfig_;
-        oauthConfig.loginSuccessPath = '/loginSuccessPath';
         oauthConfig.loginErrorMessage = 'error_description';
+        $location = _$location_;
         oauthConfig.loginFunction = function () {
             count += 1;
+            $location.path('/login-success');
         };
         $authenticationService = jasmine.createSpyObj('$authenticationService', ['login', 'getToken']);
-        $location = _$location_;
+
 
         $q = _$q_;
 
@@ -51,7 +52,6 @@ describe('Controller: LoginCtrl', function () {
 
         scope.$digest();
 
-        expect($location.path()).toBe('/loginSuccessPath');
         expect($authenticationService.login).toHaveBeenCalledWith('user', 'password');
     });
 
@@ -69,6 +69,7 @@ describe('Controller: LoginCtrl', function () {
         scope.$digest();
 
         expect(count).toBe(1);
+        expect($location.path()).toBe('/login-success');
         expect($authenticationService.login).toHaveBeenCalledWith('user', 'password');
     });
 
