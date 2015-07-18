@@ -10,6 +10,16 @@ angular.module('ngOAuth2Utils')
         }
 
         return {
+            allowAnonymous: function (targetPath) {
+
+                if (targetPath.split('/').length > 2) {
+                    targetPath = '/' + targetPath.split('/')[1];
+                } else if (targetPath.split('?').length > 1) {
+                    targetPath = targetPath.split('?')[0];
+                }
+
+                return oauthConfig.forgotPasswordURL === targetPath || oauthConfig.unsecuredPaths.indexOf(targetPath) > -1;
+            },
             login: function (username, password) {
                 return $http({
                     method: 'POST',

@@ -14,7 +14,7 @@ describe('Config: $route', function () {
     it('expects /login to route to login page', function () {
         var loginRoute = $route.routes['/login'];
         expect(loginRoute.controller).toBe('LoginCtrl');
-        expect(loginRoute.template).toBe('<login-form></login-form>');
+        expect(loginRoute.templateUrl).toBe('oauth2Templates/login.html');
     });
 
     it('expects /logout to route to logout page', function () {

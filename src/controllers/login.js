@@ -15,4 +15,8 @@ angular.module('ngOAuth2Utils')
                     $scope.loginError = response.data[oauthConfig.loginErrorMessage];// jshint ignore:line
                 });
         };
+
+        if(oauthConfig.forgotPasswordURL) {
+            $scope.forgotPasswordURL = oauthConfig.forgotPasswordURL;
+        }
     });

@@ -10,9 +10,11 @@ angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
         interceptorIgnorePattern: / /,
         loginErrorMessage: '',
         loginFunction: null,
+        forgotPasswordURL: null,
         logoutSuccessMessage: '',
         storageType: 'session',
-        useRouting: true
+        useRouting: true,
+        unsecuredPaths: []
     })
 
     .config(function ($routeProvider, oauthConfig) {
@@ -20,7 +22,7 @@ angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
             $routeProvider
                 .when('/login', {
                     controller: 'LoginCtrl',
-                    template: '<login-form></login-form>'
+                    templateUrl: 'oauth2Templates/login.html'
                 })
                 .when('/logout', {
                     controller: 'LogoutCtrl',
@@ -37,14 +39,16 @@ angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
         if ($tokenService.isValidAndExpiredToken()) {
             $authenticationService.refresh();
         }
-        else if (!$tokenService.isValidToken()) {
+        else if (!$authenticationService.allowAnonymous($location.path()) && !$tokenService.isValidToken()) {
             $location.path(oauthConfig.loginPath);
         }
-        $rootScope.$on('$routeChangeStart', function () {
-            if (!$tokenService.isValidToken()) {
+        $rootScope.$on('$routeChangeStart', function (event, next) {
+
+            if (!$authenticationService.allowAnonymous(next.originalPath) && !$tokenService.isValidToken()) {
                 $rootScope.$evalAsync(function () {
                     $location.path('/login');
                 });
             }
+
         });
     });

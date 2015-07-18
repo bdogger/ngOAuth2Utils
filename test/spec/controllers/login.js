@@ -98,5 +98,17 @@ describe('Controller: LoginCtrl', function () {
         expect(scope.loginError).toEqual('Bad Credentials');
     });
 
+    it('should add the forgotPasswordURL to the scope if it is set in config', inject(function($controller){
+        oauthConfig.forgotPasswordURL = 'http://lostpassword.com';
+        LoginCtrl = $controller('LoginCtrl', {
+            $scope: scope,
+            $authenticationService: $authenticationService,
+            $location: $location,
+            oauthConfig: oauthConfig
+        });
+
+        expect(scope.forgotPasswordURL).toBe('http://lostpassword.com');
+    }));
+
 
 });

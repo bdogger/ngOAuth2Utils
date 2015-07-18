@@ -13,9 +13,11 @@ angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
         interceptorIgnorePattern: / /,
         loginErrorMessage: '',
         loginFunction: null,
+        forgotPasswordURL: null,
         logoutSuccessMessage: '',
         storageType: 'session',
-        useRouting: true
+        useRouting: true,
+        unsecuredPaths: []
     })
 
     .config(function ($routeProvider, oauthConfig) {
@@ -23,7 +25,7 @@ angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
             $routeProvider
                 .when('/login', {
                     controller: 'LoginCtrl',
-                    template: '<login-form></login-form>'
+                    templateUrl: 'oauth2Templates/login.html'
                 })
                 .when('/logout', {
                     controller: 'LogoutCtrl',
@@ -40,15 +42,17 @@ angular.module('ngOAuth2Utils', ['ngStorage', 'ngRoute'])
         if ($tokenService.isValidAndExpiredToken()) {
             $authenticationService.refresh();
         }
-        else if (!$tokenService.isValidToken()) {
+        else if (!$authenticationService.allowAnonymous($location.path()) && !$tokenService.isValidToken()) {
             $location.path(oauthConfig.loginPath);
         }
-        $rootScope.$on('$routeChangeStart', function () {
-            if (!$tokenService.isValidToken()) {
+        $rootScope.$on('$routeChangeStart', function (event, next) {
+
+            if (!$authenticationService.allowAnonymous(next.originalPath) && !$tokenService.isValidToken()) {
                 $rootScope.$evalAsync(function () {
                     $location.path('/login');
                 });
             }
+
         });
     });
 // Source: src/controllers/login.js
@@ -67,6 +71,10 @@ angular.module('ngOAuth2Utils')
                     $scope.loginError = response.data[oauthConfig.loginErrorMessage];// jshint ignore:line
                 });
         };
+
+        if(oauthConfig.forgotPasswordURL) {
+            $scope.forgotPasswordURL = oauthConfig.forgotPasswordURL;
+        }
     });
 // Source: src/controllers/logout.js
 angular.module('ngOAuth2Utils')
@@ -132,7 +140,16 @@ angular.module('ngOAuth2Utils')
     });
 // Source: src/oauth2Templates/templates.js
 angular.module('ngOAuth2Utils').run(['$templateCache', function($templateCache) {
-$templateCache.put('oauth2Templates/loginform.html',
+$templateCache.put('oauth2Templates/login.html',
+    "<login-form></login-form>\n" +
+    "<div ng-if=\"forgotPasswordURL\">\n" +
+    "    <a id=\"forgot-password-link\" class=\"btn btn-warning\" href=\"{{forgotPasswordURL}}\"><span class=\"fa fa-question-circle\"></span> Forgot/Lost Password</a>\n" +
+    "    <br />\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('oauth2Templates/loginform.html',
     "<div>\n" +
     "    <div class=\"alert alert-danger login-error\" id=\"login-error\" ng-if=\"loginError\">{{loginError}}</div>\n" +
     "    <form name=\"loginForm\" novalidate ng-submit=\"login(loginDetails)\">\n" +
@@ -167,6 +184,16 @@ angular.module('ngOAuth2Utils')
         }
 
         return {
+            allowAnonymous: function (targetPath) {
+
+                if (targetPath.split('/').length > 2) {
+                    targetPath = '/' + targetPath.split('/')[1];
+                } else if (targetPath.split('?').length > 1) {
+                    targetPath = targetPath.split('?')[0];
+                }
+
+                return oauthConfig.forgotPasswordURL === targetPath || oauthConfig.unsecuredPaths.indexOf(targetPath) > -1;
+            },
             login: function (username, password) {
                 return $http({
                     method: 'POST',

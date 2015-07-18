@@ -6,9 +6,10 @@ describe('Service: $authenticationService', function () {
     beforeEach(module('ngOAuth2Utils'));
 
     // instantiate service
-    var $authenticationService, $httpBackend, $tokenService;
+    var $authenticationService, $httpBackend, $tokenService, oauthConfig;
 
-    beforeEach(inject(function (_$httpBackend_, _$authenticationService_, _$tokenService_, oauthConfig) {
+    beforeEach(inject(function (_$httpBackend_, _$authenticationService_, _$tokenService_, _oauthConfig_) {
+        oauthConfig = _oauthConfig_;
         oauthConfig.base64BasicKey = '123Key';
         oauthConfig.getAccessTokenUrl = 'http://localhost/oauth/token';
         oauthConfig.revokeTokenUrl = 'http://localhost/token';
@@ -106,4 +107,31 @@ describe('Service: $authenticationService', function () {
         expect($tokenService.isValidToken()).toBeFalsy();
     });
 
+    it('expects allowAnonymous() to return true for forgotPasswordURL', function () {
+        oauthConfig.forgotPasswordURL = '/forgot-password';
+
+        expect($authenticationService.allowAnonymous('/forgot-password')).toBeTruthy();
+    });
+
+    it('expects allowAnonymous() to return true for unsecured paths', function () {
+        oauthConfig.unsecuredPaths.push('/foobar');
+
+        expect($authenticationService.allowAnonymous('/foobar')).toBeTruthy();
+    });
+
+    it('expects allowAnonymous() to ignore additional path variables', function () {
+        oauthConfig.unsecuredPaths.push('/foobar');
+
+        expect($authenticationService.allowAnonymous('/foobar/123/123')).toBeTruthy();
+    });
+
+    it('expects allowAnonymous() to ignore additional parameters', function () {
+        oauthConfig.unsecuredPaths.push('/foobar');
+
+        expect($authenticationService.allowAnonymous('/foobar?foo=bar')).toBeTruthy();
+    });
+
+    it('expects allowAnonymous() to return false for all other urls', function () {
+        expect($authenticationService.allowAnonymous('/secured-only')).toBeFalsy();
+    });
 });

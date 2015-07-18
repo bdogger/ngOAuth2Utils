@@ -7,9 +7,11 @@ describe('Directive: loginForm', function () {
     beforeEach(module('oauth2Templates/loginform.html'));
 
     var element,
+        oauthConfig,
         scope;
 
-    beforeEach(inject(function ($rootScope) {
+    beforeEach(inject(function ($rootScope, _oauthConfig_) {
+        oauthConfig = _oauthConfig_;
         scope = $rootScope.$new();
     }));
 

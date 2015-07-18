@@ -1,6 +1,15 @@
 angular.module('ngOAuth2Utils').run(['$templateCache', function($templateCache) {
   'use strict';
 
+  $templateCache.put('oauth2Templates/login.html',
+    "<login-form></login-form>\n" +
+    "<div ng-if=\"forgotPasswordURL\">\n" +
+    "    <a id=\"forgot-password-link\" class=\"btn btn-warning\" href=\"{{forgotPasswordURL}}\"><span class=\"fa fa-question-circle\"></span> Forgot/Lost Password</a>\n" +
+    "    <br />\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('oauth2Templates/loginform.html',
     "<div>\n" +
     "    <div class=\"alert alert-danger login-error\" id=\"login-error\" ng-if=\"loginError\">{{loginError}}</div>\n" +
