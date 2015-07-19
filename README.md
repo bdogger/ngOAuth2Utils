@@ -30,13 +30,16 @@ Configure the ouathConstants in a config block:
         .config(function(oauthConfig) {
            oauthConfig.getAccessTokenUrl = 'http://www.mysite.com/ouath/token';
            oauthConfig.base64BasicKey = '123123asdfasdf=asdfasdf';
-           revokeTokenUrl = 'http://www.mysite.com/token';
-           interceptorIgnorePattern = /oauth\/token/;           
-           storageType = 'session';
-           loginSuccessPath = '/successful-login-path';
-           loginErrorMessage = 'error_description';
-           logoutSuccessMessage = 'logoutSuccess';
-           useRouting = true;
+           oauthConfig.revokeTokenUrl = 'http://www.mysite.com/token';
+           oauthConfig.interceptorIgnorePattern = /oauth\/token/;           
+           oauthConfig.storageType = 'session';
+           oauthConfig.loginSuccessPath = '/successful-login-path';
+           oauthConfig.loginErrorMessage = 'error_description';
+           oauthConfig.logoutSuccessMessage = 'logoutSuccess';           
+           oauthConfig.useRouting = true;           
+           oauthConfig.forgotPasswordURL = 'http://localhost/#/forgot-password';
+           oauthConfig.unsecuredPaths.push('/forgot-password');
+           oauthConfig.unsecuredPaths.push('/unsecured');
         });
 
 ##Configuration Values##
@@ -62,6 +65,9 @@ Configure the ouathConstants in a config block:
 
 **loginFunction** a function to be ran when successfully logged in
 
+**forgotPasswordURL** provide this value if you have a special form for requesting a password reset
+
+**unsecuredPaths** an array of paths that will not require authentication to view
 
 ##Usage##
 If userRouting is true, then it is assumed you are using routes and ng-view, then the app will configure a login route for you and require unauthenticated users to authenticate using the provided login form.
