@@ -1,5 +1,13 @@
-<login-form></login-form>
-<div ng-if="forgotPasswordURL">
-    <a id="forgot-password-link" class="btn btn-warning" href="{{forgotPasswordURL}}"><span class="fa fa-question-circle"></span> Forgot/Lost Password</a>
-    <br />
+<div class="row">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+    <div class="col-lg-8 col-sm-8 col-md-8 col-xs-8">
+        <login-form></login-form>
+        <div ng-if="forgotPasswordURL">
+            <a id="forgot-password-link" class="btn btn-warning" href="{{forgotPasswordURL}}"><span
+                    class="fa fa-question-circle"></span> Forgot/Lost Password</a>
+            <br/>
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+</div>
 </div>

@@ -141,10 +141,18 @@ angular.module('ngOAuth2Utils')
 // Source: src/oauth2Templates/templates.js
 angular.module('ngOAuth2Utils').run(['$templateCache', function($templateCache) {
 $templateCache.put('oauth2Templates/login.html',
-    "<login-form></login-form>\n" +
-    "<div ng-if=\"forgotPasswordURL\">\n" +
-    "    <a id=\"forgot-password-link\" class=\"btn btn-warning\" href=\"{{forgotPasswordURL}}\"><span class=\"fa fa-question-circle\"></span> Forgot/Lost Password</a>\n" +
-    "    <br />\n" +
+    "<div class=\"row\">\n" +
+    "    <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-2\"></div>\n" +
+    "    <div class=\"col-lg-8 col-sm-8 col-md-8 col-xs-8\">\n" +
+    "        <login-form></login-form>\n" +
+    "        <div ng-if=\"forgotPasswordURL\">\n" +
+    "            <a id=\"forgot-password-link\" class=\"btn btn-warning\" href=\"{{forgotPasswordURL}}\"><span\n" +
+    "                    class=\"fa fa-question-circle\"></span> Forgot/Lost Password</a>\n" +
+    "            <br/>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "    <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-2\"></div>\n" +
+    "</div>\n" +
     "</div>\n"
   );
 
