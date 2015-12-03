@@ -99,7 +99,7 @@ angular.module('ngOAuth2Utils')
     .directive('logoutMessage', function () {
         return {
             restrict: 'E',
-            template: '<div class="alert alert-success" id="logout-message">You have successfully logged out.</div>'
+            templateUrl: 'oauth2Templates/logout.html'
         };
     });
 // Source: src/directives/requireauthenticated.js
@@ -176,6 +176,17 @@ $templateCache.put('oauth2Templates/login.html',
     "            </button>\n" +
     "        </div>\n" +
     "    </form>\n" +
+    "</div>"
+  );
+
+
+  $templateCache.put('oauth2Templates/logout.html',
+    "<div class=\"row\">\n" +
+    "    <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-2\"></div>\n" +
+    "    <div class=\"col-lg-8 col-sm-8 col-md-8 col-xs-8\">\n" +
+    "        <div class=\"alert alert-success\" id=\"logout-message\">You have successfully logged out.</div>\n" +
+    "    </div>\n" +
+    "    <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-2\"></div>\n" +
     "</div>"
   );
 

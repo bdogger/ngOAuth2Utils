@@ -4,6 +4,7 @@ describe('Directive: logoutMessage', function () {
 
     // load the directive's module
     beforeEach(module('ngOAuth2Utils'));
+    beforeEach(module('oauth2Templates/logout.html'));
 
     var element,
         scope;
@@ -15,6 +16,7 @@ describe('Directive: logoutMessage', function () {
     it('should display the logout message', inject(function ($compile) {
         element = angular.element('<logout-message></logout-message>');
         element = $compile(element)(scope);
-        expect(element.text()).toBe('You have successfully logged out.');
+        scope.$digest();
+        expect(element.text()).toContain('You have successfully logged out.');
     }));
 });
