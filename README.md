@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/blairmotchan/ngOAuth2Utils.svg)](https://travis-ci.org/blairmotchan/ngOAuth2Utils)
+
 #ngOAuth2Utils - Set of angular utilities for interacting with OAuth2 backends#
 
 ---
